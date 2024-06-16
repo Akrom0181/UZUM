@@ -121,7 +121,7 @@ func (c *customerRepo) GetList(ctx context.Context, req *us.GetListCustomerReque
             gender,
             created_at,
             updated_at
-        FROM customer WHERE deleted_at=0
+        FROM customer WHERE deleted_at is null
     `+filter)
 
 	if err != nil {
@@ -131,9 +131,11 @@ func (c *customerRepo) GetList(ctx context.Context, req *us.GetListCustomerReque
 
 	defer rows.Close()
 
+	var count int64
+
 	for rows.Next() {
 		var customer us.Customer
-
+		count++
 		err = rows.Scan(&customer.Id, &customer.Firstname, &customer.Lastname, &customer.Phone, &customer.Email,
 			&customer.Languange, &date_of_birth, &customer.Gender, &created_at, &updated_at)
 
@@ -150,13 +152,6 @@ func (c *customerRepo) GetList(ctx context.Context, req *us.GetListCustomerReque
 
 	if err = rows.Err(); err != nil {
 		log.Println("rows iteration error:", err)
-		return nil, err
-	}
-
-	var count int64
-	err = c.db.QueryRow(ctx, `SELECT COUNT(*) FROM customer`).Scan(&count)
-	if err != nil {
-		log.Println("error while counting customers:", err)
 		return nil, err
 	}
 

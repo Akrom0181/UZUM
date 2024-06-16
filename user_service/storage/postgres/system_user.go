@@ -116,7 +116,7 @@ func (u *userRepo) GetList(ctx context.Context, req *us.GetListUsRequest) (resp 
 	}
 	defer rows.Close()
 
-	var count int = 0
+	var count int64 = 0
 
 	for rows.Next() {
 		var user us.Us
@@ -135,7 +135,7 @@ func (u *userRepo) GetList(ctx context.Context, req *us.GetListUsRequest) (resp 
 		resp.Users = append(resp.Users, &user)
 	}
 
-	resp.Count = int64(count)
+	resp.Count = count
 
 	return resp, nil
 }

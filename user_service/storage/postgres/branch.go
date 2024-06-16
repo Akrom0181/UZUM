@@ -131,9 +131,10 @@ func (u *branchRepo) GetList(ctx context.Context, req *us.GetListBranchRequest) 
 	}
 	defer rows.Close()
 
+	var count int64 = 0
 	for rows.Next() {
 		var branch us.Branch
-
+		count++
 		err = rows.Scan(&branch.Id, &branch.Phone, &branch.Name, &location, &branch.Address,
 			&open_time, &close_time, &branch.Active, &created_at, &updated_at)
 
@@ -149,13 +150,6 @@ func (u *branchRepo) GetList(ctx context.Context, req *us.GetListBranchRequest) 
 		branch.UpdatedAt = updated_at.String
 
 		resp.Branches = append(resp.Branches, &branch)
-	}
-
-	var count int64
-	err = u.db.QueryRow(ctx, `SELECT COUNT(*) FROM branch`).Scan(&count)
-	if err != nil {
-		log.Println("error while counting branches", err)
-		return nil, err
 	}
 
 	resp.Count = count

@@ -1,6 +1,0 @@
-[submodule "user_api_gateway"]
-	path = user_api_gateway
-	url = git@github.com:Akrom0181/NewUzum.git
-[submodule "user_service"]
-	path = user_service
-	url = git@github.com:Akrom0181/NewUzum.git

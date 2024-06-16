@@ -118,10 +118,11 @@ func (u *sellerRepo) GetList(ctx context.Context, req *us.GetListSellerRequest) 
 		return nil, err
 	}
 	defer rows.Close()
+	var count int64
 
 	for rows.Next() {
 		var seller us.Seller
-
+		count++
 		err = rows.Scan(&seller.Id, &seller.Phone, &seller.Email, &seller.Name, &seller.ShopId,
 			&created_at, &updated_at)
 
@@ -133,13 +134,6 @@ func (u *sellerRepo) GetList(ctx context.Context, req *us.GetListSellerRequest) 
 		seller.UpdatedAt = updated_at.String
 
 		resp.Sellers = append(resp.Sellers, &seller)
-	}
-
-	var count int64
-	err = u.db.QueryRow(ctx, `SELECT COUNT(*) FROM seller`).Scan(&count)
-	if err != nil {
-		log.Println("error while counting sellers", err)
-		return nil, err
 	}
 
 	resp.Count = count

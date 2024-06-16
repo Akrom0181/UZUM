@@ -41,7 +41,7 @@ func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, erro
 		return nil, err
 	}
 
-	return &Store{
+	return & Store {
 		db: pool,
 	}, err
 }

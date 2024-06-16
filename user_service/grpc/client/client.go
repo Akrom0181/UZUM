@@ -2,11 +2,14 @@ package client
 
 import (
 	"microservice/config"
+	// "user_service"
 )
 
-type ServiceManagerI interface{}
+type ServiceManagerI interface {
+}
 
-type grpcClients struct{}
+type grpcClients struct {
+}
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 
