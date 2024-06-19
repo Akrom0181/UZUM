@@ -142,8 +142,8 @@ func (u *sellerRepo) GetList(ctx context.Context, req *us.GetListSellerRequest) 
 }
 
 // Update implements storage.UserRepoI.
-func (u *sellerRepo) Update(ctx context.Context, req *us.UpdateSeller) (resp *us.Seller, err error) {
-	_, err = u.db.Exec(ctx, `
+func (u *sellerRepo) Update(ctx context.Context, req *us.UpdateSeller) (*us.Seller, error) {
+	_, err := u.db.Exec(ctx, `
         UPDATE seller SET
             phone = $2,
             email = $3,

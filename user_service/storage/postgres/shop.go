@@ -23,11 +23,11 @@ func NewShopRepo(db *pgxpool.Pool) storage.ShopRepoI {
 }
 
 // Create implements storage.ShopRepoI.
-func (s *shopRepo) Create(ctx context.Context, req *us.CreateShop) (resp *us.Shop, err error) {
-	resp = &us.Shop{}
+func (s *shopRepo) Create(ctx context.Context, req *us.CreateShop) (*us.Shop, error) {
+	// resp := &us.Shop{}
 	id := uuid.NewString()
 
-	_, err = s.db.Exec(ctx, `
+	_, err := s.db.Exec(ctx, `
 		INSERT INTO shop (
 			id,
 			slug,
@@ -166,7 +166,6 @@ func (s *shopRepo) GetList(ctx context.Context, req *us.GetListShopRequest) (*us
 		shop.UpdatedAt = updated_at.String
 		shop.Currency = currency.String
 
-
 		resp.Shops = append(resp.Shops, &shop)
 	}
 
@@ -183,8 +182,8 @@ func (s *shopRepo) GetList(ctx context.Context, req *us.GetListShopRequest) (*us
 }
 
 // Update implements storage.ShopRepoI.
-func (s *shopRepo) Update(ctx context.Context, req *us.UpdateShop) (resp *us.Shop, err error) {
-	_, err = s.db.Exec(ctx, `
+func (s *shopRepo) Update(ctx context.Context, req *us.UpdateShop) (*us.Shop, error) {
+	_, err := s.db.Exec(ctx, `
         UPDATE shop SET
             slug = $2,
             phone = $3,

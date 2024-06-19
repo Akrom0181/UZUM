@@ -1,20 +1,90 @@
 package client
 
 import (
+	"fmt"
 	"microservice/config"
-	// "user_service"
+	"microservice/genproto/catalog_service"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type ServiceManagerI interface {
+	CategoryService() catalog_service.CategoryServiceClient
+	// ProductCategoryService() catalog_service.CategoryServiceClient
+
 }
 
 type grpcClients struct {
+	categoryService catalog_service.CategoryServiceClient
+	// productCategoryService catalog_service.CategoryServiceClient
 }
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 
-	return &grpcClients{}, nil
+	connCategoryService, err := grpc.Dial(
+		fmt.Sprintf("%s%s", cfg.CatalogServicePort, cfg.CatalogServiceHost),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(52428800), grpc.MaxCallSendMsgSize(52428800)),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+
+	// connProductCategoryService, err := grpc.Dial(
+	// 	fmt.Sprintf("%s%s", cfg.CatalogServicePort, cfg.CatalogServiceHost),
+	// 	grpc.WithTransportCredentials(insecure.NewCredentials()),
+	// 	grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(52428800), grpc.MaxCallSendMsgSize(52428800)),
+	// )
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return &grpcClients{
+		categoryService: catalog_service.NewCategoryServiceClient(connCategoryService),
+		// productCategoryService: catalog_service.CategoryServiceServer(connProductCategoryService),
+	}, nil
 }
+
+func (g *grpcClients) CategoryService() catalog_service.CategoryServiceClient {
+	return g.categoryService
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 	connUser, err := grpc.Dial(
 // 		fmt.Sprintf("%s:%s", cfg.UserServiceHost, cfg.UserServicePort),

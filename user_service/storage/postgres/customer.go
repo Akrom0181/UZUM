@@ -23,11 +23,11 @@ func NewCustomerRepo(db *pgxpool.Pool) storage.CustomerRepoI {
 }
 
 // Create implements storage.CustomerRepoI.
-func (c *customerRepo) Create(ctx context.Context, req *us.CreateCustomer) (resp *us.Customer, err error) {
-	resp = &us.Customer{}
+func (c *customerRepo) Create(ctx context.Context, req *us.CreateCustomer) (*us.Customer, error) {
+	// resp = &us.Customer{}
 	id := uuid.NewString()
 
-	_, err = c.db.Exec(ctx, `
+	_, err := c.db.Exec(ctx, `
 		INSERT INTO customer (
 			id,
 			firstname,
@@ -93,8 +93,8 @@ func (c *customerRepo) GetByID(ctx context.Context, req *us.CustomerPrimaryKey) 
 }
 
 // GetAll implements storage.CustomerRepoI.
-func (c *customerRepo) GetList(ctx context.Context, req *us.GetListCustomerRequest) (resp *us.GetListCustomerResponse, err error) {
-	resp = &us.GetListCustomerResponse{}
+func (c *customerRepo) GetList(ctx context.Context, req *us.GetListCustomerRequest) (*us.GetListCustomerResponse, error) {
+	resp := &us.GetListCustomerResponse{}
 	var (
 		filter     string
 		created_at sql.NullString

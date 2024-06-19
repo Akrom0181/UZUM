@@ -28,6 +28,9 @@ type Config struct {
 	PostgresPassword string
 	PostgresDatabase string
 
+	CatalogServicePort string
+	CatalogServiceHost string
+
 	UserServiceHost string
 	UserServicePort string
 
@@ -55,6 +58,9 @@ func Load() Config {
 
 	config.UserServiceHost = cast.ToString(getOrReturnDefaultValue("USER_SERVICE_HOST", "localhost"))
 	config.UserServicePort = cast.ToString(getOrReturnDefaultValue("USER_SEVICE_PORT", ":8081"))
+
+	config.CatalogServiceHost = cast.ToString(getOrReturnDefaultValue("CATALOG_SERVICE_HOST", "localhost"))
+	config.CatalogServicePort = cast.ToString(getOrReturnDefaultValue("CATALOG_SEVICE_PORT", ":8081"))
 
 	return config
 }

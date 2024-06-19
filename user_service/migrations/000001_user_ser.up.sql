@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS customer (
     id UUID PRIMARY KEY,
     firstname VARCHAR(55) NOT NUll,
     lastname VARCHAR(55),
-    phone VARCHAR(20) NOT NULL,
-    email VARCHAR(30) NOT NULL,
+    phone VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(30) NOT NULL UNIQUE,
     language VARCHAR(2) CHECK (language IN ('uz', 'ru', 'en')) NOT NULL,
     date_of_birth DATE NOT NULL,
     gender VARCHAR(6) CHECK (gender IN ('male', 'female')) NOT NULL,
@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS customer (
 
 CREATE TABLE IF NOT EXISTS system_user (
     id UUID PRIMARY KEY,
-    phone VARCHAR NOT NULL,
-    gmail VARCHAR NOT NULL,
+    phone VARCHAR NOT NULL UNIQUE,
+    gmail VARCHAR NOT NULL UNIQUE,
     name VARCHAR NOT NULL,
     role VARCHAR(7) CHECK (role IN ('admin', 'courier')) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS system_user (
 
 CREATE TABLE IF NOT EXISTS seller (
     id UUID PRIMARY KEY,
-    phone VARCHAR NOT NULL,
-    email VARCHAR NOT NULL,
+    phone VARCHAR NOT NULL UNIQUE,
+    email VARCHAR NOT NULL UNIQUE,
     name VARCHAR NOT NULL,
     shop_id UUID REFERENCES shop(id),
     created_at TIMESTAMP DEFAULT NOW(),
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS seller (
 
 CREATE TABLE IF NOT EXISTS branch (
     id UUID PRIMARY KEY,
-    phone VARCHAR NOT NULL,
+    phone VARCHAR NOT NULL UNIQUE,
     name VARCHAR(20) DEFAULT '',
     location POLYGON NOT NULL,
     address VARCHAR NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS branch (
 CREATE TABLE IF NOT EXISTS shop (
     id UUID PRIMARY KEY,
     slug VARCHAR NOT NULL,
-    phone VARCHAR NOT NULL,
+    phone VARCHAR NOT NULL UNIQUE,
     name_uz VARCHAR(20) DEFAULT '',
     name_ru VARCHAR(20) DEFAULT '',
     name_en VARCHAR(20) DEFAULT '',

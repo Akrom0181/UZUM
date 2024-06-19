@@ -50,10 +50,10 @@ func (b *BranchService) GetByID(ctx context.Context, req *user_service.BranchPri
 	return resp, nil
 }
 
-func (b *BranchService) GetList(ctx context.Context, req *user_service.GetListBranchRequest) (resp *user_service.GetListBranchResponse, err error) {
+func (b *BranchService) GetList(ctx context.Context, req *user_service.GetListBranchRequest) (*user_service.GetListBranchResponse, error) {
 	b.log.Info("---GetAllBranch--->>>", logger.Any("req", req))
 
-	resp, err = b.strg.Branch().GetList(ctx, req)
+	resp, err := b.strg.Branch().GetList(ctx, req)
 	if err != nil {
 		b.log.Error("---GetAllBranch--->>>", logger.Error(err))
 		return &user_service.GetListBranchResponse{}, err
@@ -62,10 +62,10 @@ func (b *BranchService) GetList(ctx context.Context, req *user_service.GetListBr
 	return resp, nil
 }
 
-func (b *BranchService) Update(ctx context.Context, req *user_service.UpdateBranch) (resp *user_service.Branch, err error) {
+func (b *BranchService) Update(ctx context.Context, req *user_service.UpdateBranch) (*user_service.Branch, error) {
 	b.log.Info("---UpdateBranch--->>>", logger.Any("req", req))
 
-	resp, err = b.strg.Branch().Update(ctx, req)
+	resp, err := b.strg.Branch().Update(ctx, req)
 	if err != nil {
 		b.log.Error("---UpdateBranch--->>>", logger.Error(err))
 		return &user_service.Branch{}, err
@@ -74,10 +74,10 @@ func (b *BranchService) Update(ctx context.Context, req *user_service.UpdateBran
 	return resp, nil
 }
 
-func (b *BranchService) Delete(ctx context.Context, req *user_service.BranchPrimaryKey) (resp *user_service.Empty3, err error) {
+func (b *BranchService) Delete(ctx context.Context, req *user_service.BranchPrimaryKey) (*user_service.Empty3, error) {
 	b.log.Info("---DeleteBranch--->>>", logger.Any("req", req))
 
-	err = b.strg.Branch().Delete(ctx, req)
+	err := b.strg.Branch().Delete(ctx, req)
 	if err != nil {
 		b.log.Error("---DeleteBranch--->>>", logger.Error(err))
 		return &user_service.Empty3{}, err

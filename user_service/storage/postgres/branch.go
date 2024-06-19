@@ -23,11 +23,11 @@ func NewBranchRepo(db *pgxpool.Pool) storage.BranchRepoI {
 }
 
 // Create implements storage.BranchRepoI.
-func (u *branchRepo) Create(ctx context.Context, req *us.CreateBranch) (resp *us.Branch, err error) {
-	resp = &us.Branch{}
+func (u *branchRepo) Create(ctx context.Context, req *us.CreateBranch) (*us.Branch, error) {
+	// resp := &us.Branch{}
 	id := uuid.NewString()
 
-	_, err = u.db.Exec(ctx, `
+	_, err := u.db.Exec(ctx, `
 		INSERT INTO branch (
 			id,
 			phone,
@@ -61,6 +61,9 @@ func (u *branchRepo) GetByID(ctx context.Context, req *us.BranchPrimaryKey) (*us
 	var (
 		created_at sql.NullString
 		updated_at sql.NullString
+		location   sql.NullString
+		open_time  sql.NullString
+		close_time sql.NullString
 	)
 
 	err := u.db.QueryRow(ctx, `
@@ -75,8 +78,8 @@ func (u *branchRepo) GetByID(ctx context.Context, req *us.BranchPrimaryKey) (*us
 	        created_at,
 	        updated_at
 	        FROM branch
-	    WHERE id=$1`, req.Id).Scan(&resp.Id, &resp.Phone, &resp.Name, &resp.Location, &resp.Address,
-		&resp.OpenTime, &resp.CloseTime, &resp.Active, &created_at, &updated_at)
+	    WHERE id=$1`, req.Id).Scan(&resp.Id, &resp.Phone, &resp.Name, &location, &resp.Address,
+		&open_time, &close_time, &resp.Active, &created_at, &updated_at)
 
 	if err != nil {
 		log.Println("error while getting branch by id", err)
@@ -85,6 +88,9 @@ func (u *branchRepo) GetByID(ctx context.Context, req *us.BranchPrimaryKey) (*us
 
 	resp.CreatedAt = created_at.String
 	resp.UpdatedAt = updated_at.String
+	resp.Location = location.String
+	resp.OpenTime = open_time.String
+	resp.CloseTime = close_time.String
 
 	return resp, nil
 }
@@ -158,8 +164,8 @@ func (u *branchRepo) GetList(ctx context.Context, req *us.GetListBranchRequest) 
 }
 
 // Update implements storage.BranchRepoI.
-func (u *branchRepo) Update(ctx context.Context, req *us.UpdateBranch) (resp *us.Branch, err error) {
-	_, err = u.db.Exec(ctx, `
+func (u *branchRepo) Update(ctx context.Context, req *us.UpdateBranch) (*us.Branch, error) {
+	_, err := u.db.Exec(ctx, `
         UPDATE branch SET
             phone = $2,
             name = $3,

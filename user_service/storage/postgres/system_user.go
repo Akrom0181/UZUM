@@ -80,8 +80,8 @@ func (u *userRepo) GetByID(ctx context.Context, req *us.UsPrimaryKey) (*us.Us, e
 	return resp, nil
 }
 
-func (u *userRepo) GetList(ctx context.Context, req *us.GetListUsRequest) (resp *us.GetListUsResponse, err error) {
-	resp = &us.GetListUsResponse{}
+func (u *userRepo) GetList(ctx context.Context, req *us.GetListUsRequest) (*us.GetListUsResponse, error) {
+	resp := &us.GetListUsResponse{}
 
 	var (
 		filter     string
@@ -140,8 +140,8 @@ func (u *userRepo) GetList(ctx context.Context, req *us.GetListUsRequest) (resp 
 	return resp, nil
 }
 
-func (u *userRepo) Update(ctx context.Context, req *us.UpdateUs) (resp *us.Us, err error) {
-	_, err = u.db.Exec(ctx, `
+func (u *userRepo) Update(ctx context.Context, req *us.UpdateUs) (*us.Us,  error) {
+	_, err := u.db.Exec(ctx, `
         UPDATE system_user SET
             phone = $2,
             gmail = $3,
